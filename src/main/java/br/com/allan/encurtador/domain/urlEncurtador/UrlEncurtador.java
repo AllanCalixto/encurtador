@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Entity(name = "UrlEncurtador")
-@Table(name = "urlEncurtador")
+@Table(name = "urlencurtador")
 @Getter
 @Setter
 @AllArgsConstructor
