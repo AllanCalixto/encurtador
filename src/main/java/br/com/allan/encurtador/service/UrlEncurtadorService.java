@@ -26,7 +26,7 @@ public class UrlEncurtadorService {
             encurtador.setAlias(alias);
             encurtador.setUrl(dto.url());
             encurtador.setUrlGerada(dto.url() + "/" + alias);
-            repository.save(encurtador);
+            //repository.save(encurtador);
         }
              return encurtador;
     }
