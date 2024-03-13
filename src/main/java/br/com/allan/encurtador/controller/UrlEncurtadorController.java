@@ -1,5 +1,6 @@
 package br.com.allan.encurtador.controller;
 
+import br.com.allan.encurtador.domain.urlEncurtador.EncurtadorResponse;
 import br.com.allan.encurtador.domain.urlEncurtador.UrlEncurtadorDto;
 import br.com.allan.encurtador.service.UrlEncurtadorService;
 import jakarta.validation.Valid;
@@ -18,8 +19,8 @@ public class UrlEncurtadorController {
 
     @PostMapping("/criar")
     @Transactional
-    public ResponseEntity criarUrlEncurtador(@RequestBody @Valid UrlEncurtadorDto dto) {
-        service.criar(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new UrlEncurtadorDto(null,null,null));
+    public ResponseEntity<EncurtadorResponse> criarUrlEncurtador(@RequestBody @Valid UrlEncurtadorDto dto) {
+        EncurtadorResponse response = service.criar(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

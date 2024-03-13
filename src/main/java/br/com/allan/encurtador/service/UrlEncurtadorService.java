@@ -1,7 +1,7 @@
 package br.com.allan.encurtador.service;
 
 import br.com.allan.encurtador.Exception.ValidacaoException;
-import br.com.allan.encurtador.domain.urlEncurtador.UrlEncurtador;
+import br.com.allan.encurtador.domain.urlEncurtador.EncurtadorResponse;
 import br.com.allan.encurtador.domain.urlEncurtador.UrlEncurtadorDto;
 import br.com.allan.encurtador.repository.UrlEncurtadorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,19 +16,22 @@ public class UrlEncurtadorService {
     @Autowired
     private UrlEncurtadorRepository repository;
 
-    public UrlEncurtador criar(UrlEncurtadorDto dto)  {
-        UrlEncurtador encurtador = new UrlEncurtador();
+    public EncurtadorResponse criar(UrlEncurtadorDto dto)  {
         if (dto.url() == null) {
             throw new ValidacaoException("A URL não pode ser nula!");
         }
+        String alias;
         if (dto.alias() == null) {
-            var alias = aliasAleatorio();
-            encurtador.setAlias(alias);
-            encurtador.setUrl(dto.url());
-            encurtador.setUrlGerada(dto.url() + "/" + alias);
-            //repository.save(encurtador);
+            alias = aliasAleatorio();;
+            String url = dto.url();
+            String urlGerada = url + "/" + alias;
+            EncurtadorResponse response = new EncurtadorResponse(alias, url, urlGerada);
+            System.out.println("RESPONSE: " + response);
+        } else {
+            alias = dto.alias();
         }
-             return encurtador;
+        String urlGerada = dto.url() + "/" + alias;
+        return new EncurtadorResponse(alias, dto.url(), urlGerada);
     }
 
     private String aliasAleatorio() {

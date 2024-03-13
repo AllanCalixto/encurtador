@@ -8,4 +8,5 @@ public record UrlEncurtadorDto(
         String url,
         String urlGerada
 ) {
+
 }
