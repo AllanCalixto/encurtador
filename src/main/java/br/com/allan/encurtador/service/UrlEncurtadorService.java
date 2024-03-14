@@ -2,6 +2,7 @@ package br.com.allan.encurtador.service;
 
 import br.com.allan.encurtador.Exception.ValidacaoException;
 import br.com.allan.encurtador.domain.urlEncurtador.EncurtadorResponse;
+import br.com.allan.encurtador.domain.urlEncurtador.Statistics;
 import br.com.allan.encurtador.domain.urlEncurtador.UrlEncurtador;
 import br.com.allan.encurtador.domain.urlEncurtador.UrlEncurtadorDto;
 import br.com.allan.encurtador.repository.UrlEncurtadorRepository;
@@ -18,22 +19,35 @@ public class UrlEncurtadorService {
     private UrlEncurtadorRepository repository;
 
     public EncurtadorResponse criar(UrlEncurtadorDto dto)  {
+        long startTime = System.currentTimeMillis();
+
         if (dto.url() == null || dto.url().isEmpty()) {
             throw new ValidacaoException("A URL não pode ser nula!");
         }
+
         String alias;
         if (dto.alias() == null) {
             alias = aliasAleatorio();
-            String url = dto.url();
-            String urlGerada = url + "/" + alias;
-            EncurtadorResponse response = new EncurtadorResponse(alias, url, urlGerada);
         } else {
             alias = dto.alias();
         }
+
         String urlGerada = dto.url() + "/" + alias;
         UrlEncurtador encurtador = new UrlEncurtador(null, alias, dto.url(), urlGerada);
         repository.save(encurtador);
-        return new EncurtadorResponse(alias, dto.url(), urlGerada);
+
+        long endTime = System.currentTimeMillis();
+        long timeTaken = endTime - startTime;
+        String formattedTimeTaken = timeTaken + "ms";
+
+        Statistics statistics = new Statistics(formattedTimeTaken);
+
+        return EncurtadorResponse.builder()
+                .alias(alias)
+                .url(dto.url())
+                .urlGerada(urlGerada)
+                .statistics(statistics)
+                .build();
     }
 
     private String aliasAleatorio() {
@@ -43,6 +57,5 @@ public class UrlEncurtadorService {
         Base64.Encoder encoder = Base64.getUrlEncoder();
         String aliasAleatorio = encoder.encodeToString(bytes);
         return aliasAleatorio.substring(0, 6);
-
     }
 }
