@@ -22,7 +22,7 @@ public class UrlEncurtadorService {
         long startTime = System.currentTimeMillis();
 
         if (dto.url() == null || dto.url().isEmpty()) {
-            throw new ValidacaoException("A URL não pode ser nula!");
+            throw new ValidacaoException("A URL NÃO PODE SER NULA!");
         }
 
         String alias;
@@ -30,6 +30,10 @@ public class UrlEncurtadorService {
             alias = aliasAleatorio();
         } else {
             alias = dto.alias();
+        }
+
+        if (repository.findByAlias(alias).isPresent()) {
+            throw new ValidacaoException("{ERR_CODE: 001, Description:CUSTOM ALIAS ALREADY EXISTS}");
         }
 
         String urlGerada = dto.url() + "/" + alias;
@@ -58,4 +62,5 @@ public class UrlEncurtadorService {
         String aliasAleatorio = encoder.encodeToString(bytes);
         return aliasAleatorio.substring(0, 6);
     }
+
 }

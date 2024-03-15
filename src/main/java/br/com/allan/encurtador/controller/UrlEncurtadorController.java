@@ -1,5 +1,6 @@
 package br.com.allan.encurtador.controller;
 
+import br.com.allan.encurtador.Exception.ValidacaoException;
 import br.com.allan.encurtador.domain.urlEncurtador.EncurtadorResponse;
 import br.com.allan.encurtador.domain.urlEncurtador.Statistics;
 import br.com.allan.encurtador.domain.urlEncurtador.UrlEncurtadorDto;
@@ -10,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/encurtador")
@@ -38,8 +41,6 @@ public class UrlEncurtadorController {
                 .urlGerada(response.urlGerada())
                 .statistics(statistics)
                 .build();
-
-
         return ResponseEntity.status(HttpStatus.CREATED).body(responseComStatistics);
     }
 }
