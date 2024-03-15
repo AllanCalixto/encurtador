@@ -19,7 +19,6 @@ public class UrlEncurtadorService {
 
     public EncurtadorResponse criar(UrlEncurtadorDto dto)  {
         long startTime = System.currentTimeMillis();
-
         if (dto.url() == null || dto.url().isEmpty()) {
             throw new ValidacaoException("A URL NÃO PODE SER NULA!");
         }
