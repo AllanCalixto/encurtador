@@ -32,6 +32,10 @@ public class UrlEncurtadorService {
             alias = dto.alias();
         }
 
+        if (repository.existsByAlias(alias)) {
+            throw new ValidacaoException("{ERR_CODE: 001, Description:CUSTOM ALIAS ALREADY EXISTS}");
+        }
+
         String urlGerada = dto.url() + "/" + alias;
         UrlEncurtador encurtador = new UrlEncurtador(null, alias, dto.url(), urlGerada);
         repository.save(encurtador);
