@@ -8,7 +8,6 @@ import br.com.allan.encurtador.domain.urlEncurtador.UrlEncurtadorDto;
 import br.com.allan.encurtador.repository.UrlEncurtadorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.security.SecureRandom;
 import java.util.Base64;
 
