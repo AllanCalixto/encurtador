@@ -9,6 +9,7 @@ import br.com.allan.encurtador.exception.AliasException;
 import br.com.allan.encurtador.repository.UrlEncurtadorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Optional;
@@ -19,7 +20,7 @@ public class UrlEncurtadorService {
     @Autowired
     private UrlEncurtadorRepository repository;
 
-    public EncurtadorResponse criar(UrlEncurtadorDto dto)  {
+    public EncurtadorResponse criar(UrlEncurtadorDto dto) {
         long startTime = System.currentTimeMillis();
         if (dto.url() == null || dto.url().isEmpty()) {
             throw new ValidacaoException("A URL NÃO PODE SER NULA!");
@@ -54,15 +55,6 @@ public class UrlEncurtadorService {
                 .build();
     }
 
-    private String aliasAleatorio() {
-        SecureRandom random = new SecureRandom();
-        byte[] bytes = new byte[4];
-        random.nextBytes(bytes);
-        Base64.Encoder encoder = Base64.getUrlEncoder();
-        String aliasAleatorio = encoder.encodeToString(bytes);
-        return aliasAleatorio.substring(0, 6);
-    }
-
     public EncurtadorResponse buscarUrlEncurtador(String alias) {
         long startTime = System.currentTimeMillis();
         long endTime = System.currentTimeMillis();
@@ -81,5 +73,14 @@ public class UrlEncurtadorService {
         } else {
             throw new ValidacaoException("SHORTENED URL NOT FOUND: " + alias);
         }
+    }
+
+    private String aliasAleatorio() {
+        SecureRandom random = new SecureRandom();
+        byte[] bytes = new byte[4];
+        random.nextBytes(bytes);
+        Base64.Encoder encoder = Base64.getUrlEncoder();
+        String aliasAleatorio = encoder.encodeToString(bytes);
+        return aliasAleatorio.substring(0, 6);
     }
 }
