@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.Optional;
 
 @Service
 public class UrlEncurtadorService {
@@ -63,4 +64,23 @@ public class UrlEncurtadorService {
         return aliasAleatorio.substring(0, 6);
     }
 
+    public EncurtadorResponse buscarUrlEncurtador(String alias) {
+        long startTime = System.currentTimeMillis();
+        long endTime = System.currentTimeMillis();
+        long timeTaken = endTime - startTime;
+        String formattedTimeTaken = timeTaken + "ms";
+
+        Optional<Object> urlEncurtadorOptional = repository.findByAlias(alias);
+        if (urlEncurtadorOptional.isPresent()) {
+            UrlEncurtador urlEncurtador = (UrlEncurtador) urlEncurtadorOptional.get();
+            return EncurtadorResponse.builder()
+                    .alias(urlEncurtador.getAlias())
+                    .url(urlEncurtador.getUrl())
+                    .urlGerada(urlEncurtador.getUrlGerada())
+                    .statistics(new Statistics(formattedTimeTaken))
+                    .build();
+        } else {
+            throw new ValidacaoException("SHORTENED URL NOT FOUND: " + alias);
+        }
+    }
 }

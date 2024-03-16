@@ -47,4 +47,14 @@ public class UrlEncurtadorController {
             return new ResponseEntity<>(ex.toString(), HttpStatus.CONFLICT);
         }
     }
+    @GetMapping("/{alias}")
+    public ResponseEntity<?> buscarUrlEncurtador(@PathVariable String alias) {
+        try {
+            EncurtadorResponse response = service.buscarUrlEncurtador(alias);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (ValidacaoException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+
+    }
 }
