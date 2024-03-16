@@ -3,8 +3,10 @@ package br.com.allan.encurtador.controller;
 import br.com.allan.encurtador.Exception.ValidacaoException;
 import br.com.allan.encurtador.domain.urlEncurtador.EncurtadorResponse;
 import br.com.allan.encurtador.domain.urlEncurtador.Statistics;
+import br.com.allan.encurtador.domain.urlEncurtador.UrlEncurtador;
 import br.com.allan.encurtador.domain.urlEncurtador.UrlEncurtadorDto;
 import br.com.allan.encurtador.exception.AliasException;
+import br.com.allan.encurtador.repository.UrlEncurtadorRepository;
 import br.com.allan.encurtador.service.UrlEncurtadorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/encurtador")
 @Validated
@@ -20,6 +24,9 @@ public class UrlEncurtadorController {
 
     @Autowired
     private UrlEncurtadorService service;
+
+    @Autowired
+    private UrlEncurtadorRepository repository;
 
     @PostMapping("/criar")
     @Transactional
@@ -53,6 +60,5 @@ public class UrlEncurtadorController {
         } catch (ValidacaoException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
-
     }
 }

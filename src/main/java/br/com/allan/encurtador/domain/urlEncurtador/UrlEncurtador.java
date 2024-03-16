@@ -25,5 +25,4 @@ public class UrlEncurtador {
     @NotBlank
     private String urlGerada;
 
-
 }
