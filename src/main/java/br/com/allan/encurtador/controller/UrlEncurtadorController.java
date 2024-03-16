@@ -4,6 +4,7 @@ import br.com.allan.encurtador.Exception.ValidacaoException;
 import br.com.allan.encurtador.domain.urlEncurtador.EncurtadorResponse;
 import br.com.allan.encurtador.domain.urlEncurtador.Statistics;
 import br.com.allan.encurtador.domain.urlEncurtador.UrlEncurtadorDto;
+import br.com.allan.encurtador.exception.AliasException;
 import br.com.allan.encurtador.service.UrlEncurtadorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,23 +25,26 @@ public class UrlEncurtadorController {
 
     @PostMapping("/criar")
     @Transactional
-    public ResponseEntity<EncurtadorResponse> criarUrlEncurtador(@RequestBody UrlEncurtadorDto dto) {
+    public ResponseEntity criarUrlEncurtador(@RequestBody UrlEncurtadorDto dto) {
         long startTime = System.currentTimeMillis();
+        try {
+            EncurtadorResponse response = service.criar(dto);
 
-        EncurtadorResponse response = service.criar(dto);
+            long endTime = System.currentTimeMillis();
+            long timeTaken = endTime - startTime;
+            String formattedTimeTaken = timeTaken + "ms";
 
-        long endTime = System.currentTimeMillis();
-        long timeTaken = endTime - startTime;
-        String formattedTimeTaken = timeTaken + "ms";
+            Statistics statistics = new Statistics(formattedTimeTaken);
 
-        Statistics statistics = new Statistics(formattedTimeTaken);
-
-        EncurtadorResponse responseComStatistics = EncurtadorResponse.builder()
-                .alias(response.alias())
-                .url(response.url())
-                .urlGerada(response.urlGerada())
-                .statistics(statistics)
-                .build();
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseComStatistics);
+            EncurtadorResponse responseComStatistics = EncurtadorResponse.builder()
+                    .alias(response.alias())
+                    .url(response.url())
+                    .urlGerada(response.urlGerada())
+                    .statistics(statistics)
+                    .build();
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseComStatistics);
+        } catch (AliasException ex) {
+            return new ResponseEntity<>(ex.toString(), HttpStatus.CONFLICT);
+        }
     }
 }

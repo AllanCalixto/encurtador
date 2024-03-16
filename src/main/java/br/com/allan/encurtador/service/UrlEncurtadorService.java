@@ -5,6 +5,7 @@ import br.com.allan.encurtador.domain.urlEncurtador.EncurtadorResponse;
 import br.com.allan.encurtador.domain.urlEncurtador.Statistics;
 import br.com.allan.encurtador.domain.urlEncurtador.UrlEncurtador;
 import br.com.allan.encurtador.domain.urlEncurtador.UrlEncurtadorDto;
+import br.com.allan.encurtador.exception.AliasException;
 import br.com.allan.encurtador.repository.UrlEncurtadorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class UrlEncurtadorService {
         }
 
         if (repository.findByAlias(alias).isPresent()) {
-            throw new ValidacaoException("{ERR_CODE: 001, Description:CUSTOM ALIAS ALREADY EXISTS}");
+            throw new AliasException(alias, "001", "CUSTOM ALIAS ALREADY EXISTS");
         }
 
         String urlGerada = dto.url() + "/" + alias;
