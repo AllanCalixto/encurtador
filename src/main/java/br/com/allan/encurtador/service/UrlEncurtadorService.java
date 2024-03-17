@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -38,7 +39,7 @@ public class UrlEncurtadorService {
         }
 
         String urlGerada = dto.url() + "/" + alias;
-        UrlEncurtador encurtador = new UrlEncurtador(null, alias, dto.url(), urlGerada);
+        UrlEncurtador encurtador = new UrlEncurtador(null, alias, dto.url(), urlGerada, 0);
         repository.save(encurtador);
 
         long endTime = System.currentTimeMillis();
@@ -64,6 +65,8 @@ public class UrlEncurtadorService {
         Optional<Object> urlEncurtadorOptional = repository.findByAlias(alias);
         if (urlEncurtadorOptional.isPresent()) {
             UrlEncurtador urlEncurtador = (UrlEncurtador) urlEncurtadorOptional.get();
+            urlEncurtador.setAcessos(urlEncurtador.getAcessos() + 1);
+            repository.save(urlEncurtador);
             return EncurtadorResponse.builder()
                     .alias(urlEncurtador.getAlias())
                     .url(urlEncurtador.getUrl())
@@ -83,4 +86,5 @@ public class UrlEncurtadorService {
         String aliasAleatorio = encoder.encodeToString(bytes);
         return aliasAleatorio.substring(0, 6);
     }
+
 }

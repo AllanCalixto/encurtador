@@ -25,9 +25,6 @@ public class UrlEncurtadorController {
     @Autowired
     private UrlEncurtadorService service;
 
-    @Autowired
-    private UrlEncurtadorRepository repository;
-
     @PostMapping("/criar")
     @Transactional
     public ResponseEntity criarUrlEncurtador(@RequestBody UrlEncurtadorDto dto) {
