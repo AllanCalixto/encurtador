@@ -58,4 +58,10 @@ public class UrlEncurtadorController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }
+
+    @GetMapping("/top10")
+    public ResponseEntity<List<EncurtadorResponse>> buscarTop10() {
+        List<EncurtadorResponse> top10 = service.findByTop10();
+        return ResponseEntity.ok(top10);
+    }
 }

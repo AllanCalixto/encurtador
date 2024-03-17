@@ -12,8 +12,10 @@ import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UrlEncurtadorService {
@@ -48,12 +50,7 @@ public class UrlEncurtadorService {
 
         Statistics statistics = new Statistics(formattedTimeTaken);
 
-        return EncurtadorResponse.builder()
-                .alias(alias)
-                .url(dto.url())
-                .urlGerada(urlGerada)
-                .statistics(statistics)
-                .build();
+        return EncurtadorResponse.builder().alias(alias).url(dto.url()).urlGerada(urlGerada).statistics(statistics).build();
     }
 
     public EncurtadorResponse buscarUrlEncurtador(String alias) {
@@ -78,6 +75,18 @@ public class UrlEncurtadorService {
         }
     }
 
+    public List<EncurtadorResponse> findByTop10() {
+        List<UrlEncurtador> top10 = repository.findByTop10();
+        return top10.stream()
+                .sorted(Comparator.comparingInt(UrlEncurtador::getAcessos).reversed())
+                .map(urlEncurtador -> EncurtadorResponse.builder()
+                        .alias(urlEncurtador.getAlias())
+                        .url(urlEncurtador.getUrl())
+                        .urlGerada(urlEncurtador.getUrlGerada())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
     private String aliasAleatorio() {
         SecureRandom random = new SecureRandom();
         byte[] bytes = new byte[4];
@@ -86,5 +95,6 @@ public class UrlEncurtadorService {
         String aliasAleatorio = encoder.encodeToString(bytes);
         return aliasAleatorio.substring(0, 6);
     }
+
 
 }
