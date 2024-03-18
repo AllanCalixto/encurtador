@@ -1,12 +1,11 @@
 package br.com.allan.encurtador.controller;
 
-import br.com.allan.encurtador.Exception.ValidacaoException;
+
 import br.com.allan.encurtador.domain.urlEncurtador.EncurtadorResponse;
 import br.com.allan.encurtador.domain.urlEncurtador.Statistics;
-import br.com.allan.encurtador.domain.urlEncurtador.UrlEncurtador;
 import br.com.allan.encurtador.domain.urlEncurtador.UrlEncurtadorDto;
 import br.com.allan.encurtador.exception.AliasException;
-import br.com.allan.encurtador.repository.UrlEncurtadorRepository;
+import br.com.allan.encurtador.exception.ValidacaoException;
 import br.com.allan.encurtador.service.UrlEncurtadorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -61,7 +60,11 @@ public class UrlEncurtadorController {
 
     @GetMapping("/top10")
     public ResponseEntity<List<EncurtadorResponse>> buscarTop10() {
-        List<EncurtadorResponse> top10 = service.findByTop10();
-        return ResponseEntity.ok(top10);
+        try {
+            List<EncurtadorResponse> top10 = service.findByTop10();
+            return ResponseEntity.ok(top10);
+        } catch (ValidacaoException ex) {
+            throw new ValidacaoException("NO CONTENT");
+        }
     }
 }

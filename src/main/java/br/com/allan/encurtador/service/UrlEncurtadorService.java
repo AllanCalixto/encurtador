@@ -1,11 +1,11 @@
 package br.com.allan.encurtador.service;
 
-import br.com.allan.encurtador.Exception.ValidacaoException;
 import br.com.allan.encurtador.domain.urlEncurtador.EncurtadorResponse;
 import br.com.allan.encurtador.domain.urlEncurtador.Statistics;
 import br.com.allan.encurtador.domain.urlEncurtador.UrlEncurtador;
 import br.com.allan.encurtador.domain.urlEncurtador.UrlEncurtadorDto;
 import br.com.allan.encurtador.exception.AliasException;
+import br.com.allan.encurtador.exception.ValidacaoException;
 import br.com.allan.encurtador.repository.UrlEncurtadorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -76,6 +76,10 @@ public class UrlEncurtadorService {
     }
 
     public List<EncurtadorResponse> findByTop10() {
+        long startTime = System.currentTimeMillis();
+        long endTime = System.currentTimeMillis();
+        long timeTaken = endTime - startTime;
+        String formattedTimeTaken = timeTaken + "ms";
         List<UrlEncurtador> top10 = repository.findByTop10();
         return top10.stream()
                 .sorted(Comparator.comparingInt(UrlEncurtador::getAcessos).reversed())
@@ -83,6 +87,7 @@ public class UrlEncurtadorService {
                         .alias(urlEncurtador.getAlias())
                         .url(urlEncurtador.getUrl())
                         .urlGerada(urlEncurtador.getUrlGerada())
+                        .statistics(new Statistics(formattedTimeTaken))
                         .build())
                 .collect(Collectors.toList());
     }

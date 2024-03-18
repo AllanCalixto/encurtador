@@ -1,4 +1,4 @@
-package br.com.allan.encurtador.Exception;
+package br.com.allan.encurtador.exception;
 
 public class ValidacaoException extends RuntimeException{
 
