@@ -1,7 +1,5 @@
 # Sistema de Encurtamento de URLs
 
-Este é um sistema de encurtamento de URLs desenvolvido em Java com Spring Boot. Ele permite que os usuários encurtem URLs longas em URLs curtas e gerem estatísticas sobre as URLs encurtadas.
-
 
 ## Explicação do projeto
 https://www.youtube.com/
